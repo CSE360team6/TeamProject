@@ -11,11 +11,13 @@ import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 
 public class GUI {
 
     public static void main(String[] args){
         
+    	Node node = new Node(null, 0, null);
         // create JFrame and JTable
         JFrame frmNetworkPathwayFinder = new JFrame();
         frmNetworkPathwayFinder.setTitle("Network Pathway Finder");
@@ -25,6 +27,8 @@ public class GUI {
         Object[] columns = {"Activity","Duration","Predecessor"};
         DefaultTableModel model = new DefaultTableModel();
         model.setColumnIdentifiers(columns);
+        
+        
         
         // set the model to the table
         table.setModel(model);
@@ -109,6 +113,12 @@ public class GUI {
         frmNetworkPathwayFinder.getContentPane().add(btnAbout);
         
         JButton btnRestart = new JButton("Restart");
+        btnRestart.addActionListener(new ActionListener() {
+        	public void actionPerformed(ActionEvent e) {
+        		GUI.main(args);
+        		frmNetworkPathwayFinder.dispose();
+        	}
+        });
         btnRestart.setBounds(365, 0, 89, 23);
         frmNetworkPathwayFinder.getContentPane().add(btnRestart);
         
@@ -120,14 +130,23 @@ public class GUI {
 
             @Override
             public void actionPerformed(ActionEvent e) {
-             
+             try {
+            
                 row[0] = textActivity.getText();
-                row[1] = textDuration.getText();
-                row[2] = textPredecessor.getText();
-             
                 
+                row[1] = Integer.parseInt(textDuration.getText());
+                
+               
+                row[2] = textPredecessor.getText();
+                          
                 // add row to the table
                 model.addRow(row);
+             }
+             catch(NumberFormatException nfe) 
+             {
+             	JOptionPane.showMessageDialog(null, "The duration must be an integer.");
+             	
+             }
             }
         });
         
@@ -175,14 +194,18 @@ public class GUI {
                 int i = table.getSelectedRow();
                 
                 if(i >= 0) 
+                	try {
                 {
                    model.setValueAt(textActivity.getText(), i, 0);
-                   model.setValueAt(textDuration.getText(), i, 1);
+                   model.setValueAt(Integer.parseInt(textDuration.getText()), i, 1);
                    model.setValueAt(textPredecessor.getText(), i, 2);
                   
                 }
-                else{
-                    System.out.println("Update Error");
+               
+                }
+                catch(NumberFormatException nfe) 
+                {
+                	JOptionPane.showMessageDialog(null, "The duration must be an integer.");
                 }
             }
         });
