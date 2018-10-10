@@ -4,6 +4,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.util.ArrayList;
+
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JScrollPane;
@@ -127,16 +129,15 @@ public class GUI {
         
         // button to add the row
         btnInput.addActionListener(new ActionListener(){
-
+        	ArrayList<String> predecessor = new ArrayList<String>();
             @Override
             public void actionPerformed(ActionEvent e) {
              try {
-            
+            ;
                 row[0] = textActivity.getText();
                 
                 row[1] = Integer.parseInt(textDuration.getText());
                 
-               
                 row[2] = textPredecessor.getText();
                           
                 // add row to the table
@@ -147,6 +148,10 @@ public class GUI {
              	JOptionPane.showMessageDialog(null, "The duration must be an integer.");
              	
              }
+             textActivity.setText(null);
+             textDuration.setText(null);
+             textPredecessor.setText(null);
+             
             }
         });
         
@@ -207,6 +212,9 @@ public class GUI {
                 {
                 	JOptionPane.showMessageDialog(null, "The duration must be an integer.");
                 }
+                textActivity.setText(null);
+                textDuration.setText(null);
+                textPredecessor.setText(null);
             }
         });
         
