@@ -15,11 +15,11 @@ import javax.swing.table.DefaultTableModel;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 
-public class GUI {
-
-    public static void main(String[] args){
+public class GUI 
+{
+	//Rev 5
+	public static void main(String[] args){
         
-    	Node node = new Node(null, 0, null);
         // create JFrame and JTable
         JFrame frmNetworkPathwayFinder = new JFrame();
         frmNetworkPathwayFinder.setTitle("Network Pathway Finder");
@@ -94,6 +94,35 @@ public class GUI {
         btnProcess.setBounds(774, 311, 89, 23);
         frmNetworkPathwayFinder.getContentPane().add(btnProcess);
         
+        btnProcess.addActionListener(new ActionListener() {
+        	public void actionPerformed(ActionEvent e) {
+        		Node.Nodes.clear();
+        		try {
+        			for(int i = 0; i < model.getRowCount(); i++) {
+        				Node.add((String)model.getValueAt(i, 0), (int)model.getValueAt(i, 1), (String)model.getValueAt(i, 2));
+        			}
+        			for(int i = 0; i < Node.Nodes.size(); i++) {
+        				Node.Nodes.get(i).addPredecessors(Node.Nodes);
+        			}
+        			for(int i = 0; i < Node.Nodes.size(); i++) {
+        				if(Node.Nodes.get(i).isIsland()) {
+        					throw new ErrorException(ErrorException.ErrorID.ISLAND, Node.Nodes.get(i));
+        				}
+        			}
+        			PathFinder.findPaths(Node.Nodes);
+        			for(int i = 0; i < Node.Nodes.size(); i ++) {
+        				if(!Node.Nodes.get(i).Touched()) {
+        					throw new ErrorException(ErrorException.ErrorID.CYCLE, Node.Nodes.get(i));
+        				}
+        			}
+        			JOptionPane.showMessageDialog(null, PathFinder.Paths.toString());
+        		}
+        		catch(ErrorException Ex) {
+        			JOptionPane.showMessageDialog(null, Ex.toString());
+        		}
+        	}
+        });
+        
         JButton btnHelp = new JButton("Help");
         btnHelp.addActionListener(new ActionListener() {
         	public void actionPerformed(ActionEvent e) {
@@ -117,8 +146,11 @@ public class GUI {
         JButton btnRestart = new JButton("Restart");
         btnRestart.addActionListener(new ActionListener() {
         	public void actionPerformed(ActionEvent e) {
-        		GUI.main(args);
+        		Node.Nodes.clear();
+        		PathFinder.Paths.clear();
         		frmNetworkPathwayFinder.dispose();
+        		GUI.main(args);
+        		
         	}
         });
         btnRestart.setBounds(365, 0, 89, 23);
@@ -133,7 +165,7 @@ public class GUI {
             @Override
             public void actionPerformed(ActionEvent e) {
              try {
-            ;
+            
                 row[0] = textActivity.getText();
                 
                 row[1] = Integer.parseInt(textDuration.getText());
@@ -142,6 +174,7 @@ public class GUI {
                           
                 // add row to the table
                 model.addRow(row);
+                //Node.add((String)row[0], (int)row[1], (String)row[2]);
              }
              catch(NumberFormatException nfe) 
              {
@@ -166,6 +199,7 @@ public class GUI {
                 if(i >= 0){
                     // remove a row from jtable
                     model.removeRow(i);
+                    Node.Nodes.remove(i);
                 }
                 else{
                     System.out.println("Delete Error");

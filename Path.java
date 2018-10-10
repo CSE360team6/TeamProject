@@ -2,7 +2,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.*;
 
-//Rev 2
+//Rev 3
 
 public class Path implements Comparable<Path> {
 	private int Length;
@@ -31,6 +31,7 @@ public class Path implements Comparable<Path> {
 		return Length;
 	}
 	public void CreatePath(Node node) throws ErrorException {
+		node.Touch();
 		for(int i = 0; i < Activities.size(); i++) {
 			if(node.equals(Activities.get(i))) {
 				throw new ErrorException(ErrorException.ErrorID.CYCLE, node);

@@ -1,9 +1,8 @@
 import java.util.ArrayList;
 
-//REV 2
-
-
 public class Node {
+	//Rev 4
+	public static ArrayList<Node> Nodes = new ArrayList<Node>();
 	// Variables that will be stored in a node
 	private String Activity;
 	private int Duration;
@@ -11,6 +10,7 @@ public class Node {
 	private String PredecessorNames;
 	private boolean hasPredecessor;
 	private boolean isPredecessor;
+	private boolean Touched;
 
 	// Constructor
 	public Node(String Activity, int Duration, String PredecessorNames) {
@@ -19,6 +19,7 @@ public class Node {
 		this.PredecessorNames = PredecessorNames.replaceAll("\\s", "");
 		this.Predecessors = new ArrayList<Node>();
 		hasPredecessor = false;
+		Touched = false;
 	}
 
 	public String getName() {
@@ -44,8 +45,28 @@ public class Node {
 	public ArrayList<Node> getPredecessors() {
 		return Predecessors;
 	}
+	
+	public boolean Touched() {
+		return Touched;
+	}
+	
+	public void Touch() {
+		Touched = true;
+	}
+	
+	public static void add(String inActivity, int inDuration, String inPredecessors)
+	{		
+		// Create a new node for the input activity
+		Nodes.add(new Node (inActivity, inDuration, inPredecessors));
+	}
+	
+	public void Reset() {
+		isPredecessor = false;
+		hasPredecessor = false;
+	}
 
 	public void addPredecessors(ArrayList<Node> Nodes) throws ErrorException {
+		Predecessors.clear();
 		String[] PredecessorList = PredecessorNames.split(",");
 		for (int i = 0; i < PredecessorList.length; i++) {
 			boolean flag = true;
@@ -64,7 +85,7 @@ public class Node {
 		}
 	}
 	public boolean isIsland() {
-		return !isPredecessor && !hasPredecessor;
+		return !isPredecessor && !hasPredecessor && Nodes.size() > 1;
 	}
 	public String toString() {
 		return Activity + " " /*" Duration:" + Duration + " Predecessors:" + Predecessors*/;

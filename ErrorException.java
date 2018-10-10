@@ -1,6 +1,5 @@
-//REV 1
 public class ErrorException extends Exception {
-	
+	//Rev 2
 	public static enum ErrorID{
 		CYCLE,
 		ISLAND,
