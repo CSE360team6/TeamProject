@@ -14,9 +14,11 @@ import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
+import javax.swing.JCheckBox;
 
 public class GUI 
 {
+	private static JTextField textField;
 	//Rev 5
 	public static void main(String[] args){
         
@@ -83,7 +85,7 @@ public class GUI
         frmNetworkPathwayFinder.getContentPane().add(lblActivity);
         
         JLabel lblDuration = new JLabel("Duration");
-        lblDuration.setBounds(276, 285, 46, 14);
+        lblDuration.setBounds(276, 285, 58, 14);
         frmNetworkPathwayFinder.getContentPane().add(lblDuration);
         
         JLabel lblPredecessor = new JLabel("Predecessor");
@@ -155,6 +157,22 @@ public class GUI
         });
         btnRestart.setBounds(365, 0, 89, 23);
         frmNetworkPathwayFinder.getContentPane().add(btnRestart);
+        
+        JCheckBox chckbxShowCriticalPaths = new JCheckBox("Show Critical Paths");
+        chckbxShowCriticalPaths.setBounds(236, 355, 151, 23);
+        frmNetworkPathwayFinder.getContentPane().add(chckbxShowCriticalPaths);
+        
+        JCheckBox chckbxCreateReport = new JCheckBox("Create Report");
+        chckbxCreateReport.setBounds(389, 355, 122, 23);
+        frmNetworkPathwayFinder.getContentPane().add(chckbxCreateReport);
+        
+        textField = new JTextField();
+        textField.setBounds(526, 354, 100, 25);
+        frmNetworkPathwayFinder.getContentPane().add(textField);
+        
+        JLabel lblReportName = new JLabel("Report name");
+        lblReportName.setBounds(537, 336, 100, 14);
+        frmNetworkPathwayFinder.getContentPane().add(lblReportName);
         
         // create an array of objects to set the row data
         Object[] row = new Object[3];
@@ -252,7 +270,7 @@ public class GUI
             }
         });
         
-        frmNetworkPathwayFinder.setSize(900,400);
+        frmNetworkPathwayFinder.setSize(900,439);
         frmNetworkPathwayFinder.setLocationRelativeTo(null);
         frmNetworkPathwayFinder.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frmNetworkPathwayFinder.setVisible(true);
