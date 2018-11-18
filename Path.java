@@ -1,8 +1,8 @@
 import java.util.ArrayList;
 import java.util.Collections;
-import java.*;
 
-//Rev 3
+
+//Rev 4
 
 public class Path implements Comparable<Path> {
 	private int Length;
@@ -39,6 +39,7 @@ public class Path implements Comparable<Path> {
 		}
 		this.append(node);
 		if(node.hasPredecessor() == false) {
+			Collections.reverse(Activities);
 			return;
 		}
 		for(int i = 1; i < node.getPredecessors().size(); i++) {
@@ -49,8 +50,14 @@ public class Path implements Comparable<Path> {
 		CreatePath(node.getPredecessors().get(0));
 	}
 	public String toString(){
-		Collections.reverse(Activities);
-		return "Duration:" + Length + " " + Activities;
+		String Output = Length + "; " + Activities.get(0).getName();
+		for(int i = 1; i < Activities.size(); i ++) {
+			Output = Output.concat(", ".concat(Activities.get(i).getName()));
+		}
+		return Output;
+	}
+	public String toString(int i) {
+		return "Path " + i + ": " + toString();
 	}
 	@Override
 	public int compareTo(Path arg0) {

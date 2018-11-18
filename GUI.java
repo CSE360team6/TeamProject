@@ -4,7 +4,12 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -18,8 +23,7 @@ import javax.swing.JCheckBox;
 
 public class GUI 
 {
-	private static JTextField textField;
-	//Rev 5
+	//Rev 6
 	public static void main(String[] args){
         
         // create JFrame and JTable
@@ -96,6 +100,23 @@ public class GUI
         btnProcess.setBounds(774, 311, 89, 23);
         frmNetworkPathwayFinder.getContentPane().add(btnProcess);
         
+        JCheckBox chckbxShowCriticalPaths = new JCheckBox("Show Critical Paths");
+        chckbxShowCriticalPaths.setBounds(236, 355, 151, 23);
+        frmNetworkPathwayFinder.getContentPane().add(chckbxShowCriticalPaths);
+        
+        JCheckBox chckbxCreateReport = new JCheckBox("Create Report");
+        chckbxCreateReport.setBounds(389, 355, 122, 23);
+        frmNetworkPathwayFinder.getContentPane().add(chckbxCreateReport);
+        
+        JTextField ReportName = new JTextField();
+        ReportName.setBounds(526, 354, 100, 25);
+        frmNetworkPathwayFinder.getContentPane().add(ReportName);
+        
+        JLabel lblReportName = new JLabel("Report name");
+        lblReportName.setBounds(537, 336, 100, 14);
+        frmNetworkPathwayFinder.getContentPane().add(lblReportName);
+        
+        
         btnProcess.addActionListener(new ActionListener() {
         	public void actionPerformed(ActionEvent e) {
         		Node.Nodes.clear();
@@ -117,9 +138,51 @@ public class GUI
         					throw new ErrorException(ErrorException.ErrorID.CYCLE, Node.Nodes.get(i));
         				}
         			}
-        			JOptionPane.showMessageDialog(null, PathFinder.Paths.toString());
+					String Output;
+        			if(chckbxShowCriticalPaths.isSelected()) {
+        				int Longest = PathFinder.Paths.get(0).getLength();
+        				Output = PathFinder.Paths.get(0).toString(1);
+        				for(int i = 1; i < PathFinder.Paths.size(); i++) {
+        					Path path = PathFinder.Paths.get(i);
+        					if(path.getLength() == Longest) {
+        						Output = Output.concat(path.toString(i+1).concat("\r\n"));
+        					}
+        				}
+        			}
+        			else {
+        				Output = new String();
+        				for(int i = 0; i < PathFinder.Paths.size(); i ++) {
+        					Path path = PathFinder.Paths.get(i);
+        					Output = Output.concat(path.toString(i+1).concat("\r\n"));
+        				}
+        			}
+        			JOptionPane.showMessageDialog(null, Output);
+        			if(chckbxCreateReport.isSelected()) {
+        				String ReportTitle = ReportName.getText();
+        				String Desktop = System.getProperty("user.home") + "//Desktop";
+        				if(ReportTitle.replaceAll("\\s","").compareTo("") == 0){
+        					ReportTitle = new String("Report Title");
+        				}
+        				FileOutputStream fp = new FileOutputStream(ReportTitle.concat(".txt"));
+        				fp.write(ReportTitle.concat("\r\n\r\n").getBytes());
+        				Date date = new Date();
+        				DateFormat dateformat = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+        				fp.write(dateformat.format(date).concat("\r\n\r\n").getBytes());
+        				for(int i = 0; i < Node.Nodes.size(); i ++) {
+        					Node node = Node.Nodes.get(i);
+        					fp.write(node.toString().concat("\r\n").getBytes());
+        				}
+        				fp.write("\r\n".getBytes());
+        				Output = new String();
+        				for(int i = 0; i < PathFinder.Paths.size(); i ++) {
+        					Path path = PathFinder.Paths.get(i);
+        					Output = Output.concat(path.toString(i+1).concat("\r\n\r\n"));
+        				}
+        				fp.write(Output.getBytes());
+        				fp.close();
+        			}
         		}
-        		catch(ErrorException Ex) {
+        		catch(ErrorException | IOException Ex) {
         			JOptionPane.showMessageDialog(null, Ex.toString());
         		}
         	}
@@ -158,22 +221,7 @@ public class GUI
         btnRestart.setBounds(365, 0, 89, 23);
         frmNetworkPathwayFinder.getContentPane().add(btnRestart);
         
-        JCheckBox chckbxShowCriticalPaths = new JCheckBox("Show Critical Paths");
-        chckbxShowCriticalPaths.setBounds(236, 355, 151, 23);
-        frmNetworkPathwayFinder.getContentPane().add(chckbxShowCriticalPaths);
-        
-        JCheckBox chckbxCreateReport = new JCheckBox("Create Report");
-        chckbxCreateReport.setBounds(389, 355, 122, 23);
-        frmNetworkPathwayFinder.getContentPane().add(chckbxCreateReport);
-        
-        textField = new JTextField();
-        textField.setBounds(526, 354, 100, 25);
-        frmNetworkPathwayFinder.getContentPane().add(textField);
-        
-        JLabel lblReportName = new JLabel("Report name");
-        lblReportName.setBounds(537, 336, 100, 14);
-        frmNetworkPathwayFinder.getContentPane().add(lblReportName);
-        
+
         // create an array of objects to set the row data
         Object[] row = new Object[3];
         

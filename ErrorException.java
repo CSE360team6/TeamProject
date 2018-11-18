@@ -1,5 +1,9 @@
 public class ErrorException extends Exception {
-	//Rev 2
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -3687704887804743810L;
+	//Rev 3
 	public static enum ErrorID{
 		CYCLE,
 		ISLAND,
@@ -42,6 +46,6 @@ public class ErrorException extends Exception {
 		return ErrorType;
 	}
 	public String toString() {
-		return ErrorType.toString() + " at node " + node;
+		return ErrorType.toString() + " at node " + node.getName();
 	}
 }

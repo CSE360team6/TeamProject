@@ -1,7 +1,7 @@
 import java.util.ArrayList;
 
 public class Node {
-	//Rev 4
+	//Rev 5
 	public static ArrayList<Node> Nodes = new ArrayList<Node>();
 	// Variables that will be stored in a node
 	private String Activity;
@@ -88,6 +88,6 @@ public class Node {
 		return !isPredecessor && !hasPredecessor && Nodes.size() > 1;
 	}
 	public String toString() {
-		return Activity + " " /*" Duration:" + Duration + " Predecessors:" + Predecessors*/;
+		return Activity + " " + Duration;
 	}
 }
