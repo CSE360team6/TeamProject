@@ -47,7 +47,7 @@ public class About extends JFrame {
 		
 		JTextArea txtAbout = new JTextArea();
 		txtAbout.setText("This is a program with a gui interface that was created to path a network. It's creators are Cason Mandigo, Andrew Meshay, Kai Yin, and Justin Lynch. This project was coded using Java with "
-				+ "Eclipse as the IDE, and gitHub was used as the version control.");
+				+ "Eclipse as the IDE, and gitHub was used as the version control. The program is compatable with any computer capable of running java.");
 		txtAbout.setBounds(10, 11, 464, 439);
 		txtAbout.setLineWrap(true);
 		txtAbout.setWrapStyleWord(true);
