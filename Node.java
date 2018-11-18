@@ -1,8 +1,8 @@
 import java.util.ArrayList;
 
 public class Node {
-	//Rev 5
-	public static ArrayList<Node> Nodes = new ArrayList<Node>();
+	//Rev 6
+	//public static ArrayList<Node> Nodes = new ArrayList<Node>();
 	// Variables that will be stored in a node
 	private String Activity;
 	private int Duration;
@@ -57,7 +57,7 @@ public class Node {
 	public static void add(String inActivity, int inDuration, String inPredecessors)
 	{		
 		// Create a new node for the input activity
-		Nodes.add(new Node (inActivity, inDuration, inPredecessors));
+		//Nodes.add(new Node (inActivity, inDuration, inPredecessors));
 	}
 	
 	public void Reset() {
@@ -85,7 +85,7 @@ public class Node {
 		}
 	}
 	public boolean isIsland() {
-		return !isPredecessor && !hasPredecessor && Nodes.size() > 1;
+		return !isPredecessor && !hasPredecessor;
 	}
 	public String toString() {
 		return Activity + " " + Duration;

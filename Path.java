@@ -2,7 +2,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 
 
-//Rev 4
+//Rev 5
 
 public class Path implements Comparable<Path> {
 	private int Length;
@@ -30,7 +30,7 @@ public class Path implements Comparable<Path> {
 	public int getLength() {
 		return Length;
 	}
-	public void CreatePath(Node node) throws ErrorException {
+	public void CreatePath(Node node, ArrayList<Path> paths) throws ErrorException {
 		node.Touch();
 		for(int i = 0; i < Activities.size(); i++) {
 			if(node.equals(Activities.get(i))) {
@@ -44,10 +44,10 @@ public class Path implements Comparable<Path> {
 		}
 		for(int i = 1; i < node.getPredecessors().size(); i++) {
 			Path newPath = new Path(Length, Activities);
-			PathFinder.Paths.add(newPath);
-			newPath.CreatePath(node.getPredecessors().get(i));
+			paths.add(newPath);
+			newPath.CreatePath(node.getPredecessors().get(i), paths);
 		}
-		CreatePath(node.getPredecessors().get(0));
+		CreatePath(node.getPredecessors().get(0), paths);
 	}
 	public String toString(){
 		String Output = Length + "; " + Activities.get(0).getName();

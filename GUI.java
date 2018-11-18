@@ -23,7 +23,7 @@ import javax.swing.JCheckBox;
 
 public class GUI 
 {
-	//Rev 6
+	//Rev 7
 	public static void main(String[] args){
         
         // create JFrame and JTable
@@ -119,67 +119,39 @@ public class GUI
         
         btnProcess.addActionListener(new ActionListener() {
         	public void actionPerformed(ActionEvent e) {
-        		Node.Nodes.clear();
+        		ArrayList<Node> Nodes = new ArrayList<Node>();
         		try {
         			for(int i = 0; i < model.getRowCount(); i++) {
-        				Node.add((String)model.getValueAt(i, 0), (int)model.getValueAt(i, 1), (String)model.getValueAt(i, 2));
+        				Node temp = new Node((String)model.getValueAt(i, 0), (int)model.getValueAt(i, 1), (String)model.getValueAt(i, 2));
+        				Nodes.add(temp);
         			}
-        			for(int i = 0; i < Node.Nodes.size(); i++) {
-        				Node.Nodes.get(i).addPredecessors(Node.Nodes);
+        			for(int i = 0; i < Nodes.size(); i++) {
+        				Nodes.get(i).addPredecessors(Nodes);
         			}
-        			for(int i = 0; i < Node.Nodes.size(); i++) {
-        				if(Node.Nodes.get(i).isIsland()) {
-        					throw new ErrorException(ErrorException.ErrorID.ISLAND, Node.Nodes.get(i));
+        			for(int i = 0; i < Nodes.size(); i++) {
+        				if(Nodes.get(i).isIsland()) {
+        					throw new ErrorException(ErrorException.ErrorID.ISLAND, Nodes.get(i));
         				}
         			}
-        			PathFinder.findPaths(Node.Nodes);
-        			for(int i = 0; i < Node.Nodes.size(); i ++) {
-        				if(!Node.Nodes.get(i).Touched()) {
-        					throw new ErrorException(ErrorException.ErrorID.CYCLE, Node.Nodes.get(i));
+        			ArrayList<Path> Paths = PathFinder.findPaths(Nodes);
+        			if(Paths.isEmpty()) {
+        				throw new ErrorException(ErrorException.ErrorID.CYCLE, new Node("Terminus", 0, null));
+        			}
+        			for(int i = 0; i < Nodes.size(); i ++) {
+        				if(!Nodes.get(i).Touched()) {
+        					throw new ErrorException(ErrorException.ErrorID.CYCLE, Nodes.get(i));
         				}
         			}
-					String Output;
-        			if(chckbxShowCriticalPaths.isSelected()) {
-        				int Longest = PathFinder.Paths.get(0).getLength();
-        				Output = PathFinder.Paths.get(0).toString(1);
-        				for(int i = 1; i < PathFinder.Paths.size(); i++) {
-        					Path path = PathFinder.Paths.get(i);
-        					if(path.getLength() == Longest) {
-        						Output = Output.concat(path.toString(i+1).concat("\r\n"));
-        					}
-        				}
-        			}
-        			else {
-        				Output = new String();
-        				for(int i = 0; i < PathFinder.Paths.size(); i ++) {
-        					Path path = PathFinder.Paths.get(i);
-        					Output = Output.concat(path.toString(i+1).concat("\r\n"));
-        				}
-        			}
+					String Output = PathFinder.determineOutput(Paths, chckbxShowCriticalPaths.isSelected());
+
         			JOptionPane.showMessageDialog(null, Output);
+        			
         			if(chckbxCreateReport.isSelected()) {
         				String ReportTitle = ReportName.getText();
-        				String Desktop = System.getProperty("user.home") + "//Desktop";
         				if(ReportTitle.replaceAll("\\s","").compareTo("") == 0){
         					ReportTitle = new String("Report Title");
         				}
-        				FileOutputStream fp = new FileOutputStream(ReportTitle.concat(".txt"));
-        				fp.write(ReportTitle.concat("\r\n\r\n").getBytes());
-        				Date date = new Date();
-        				DateFormat dateformat = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
-        				fp.write(dateformat.format(date).concat("\r\n\r\n").getBytes());
-        				for(int i = 0; i < Node.Nodes.size(); i ++) {
-        					Node node = Node.Nodes.get(i);
-        					fp.write(node.toString().concat("\r\n").getBytes());
-        				}
-        				fp.write("\r\n".getBytes());
-        				Output = new String();
-        				for(int i = 0; i < PathFinder.Paths.size(); i ++) {
-        					Path path = PathFinder.Paths.get(i);
-        					Output = Output.concat(path.toString(i+1).concat("\r\n\r\n"));
-        				}
-        				fp.write(Output.getBytes());
-        				fp.close();
+        				PathFinder.generateReport(Paths, Nodes, ReportTitle);
         			}
         		}
         		catch(ErrorException | IOException Ex) {
@@ -211,8 +183,6 @@ public class GUI
         JButton btnRestart = new JButton("Restart");
         btnRestart.addActionListener(new ActionListener() {
         	public void actionPerformed(ActionEvent e) {
-        		Node.Nodes.clear();
-        		PathFinder.Paths.clear();
         		frmNetworkPathwayFinder.dispose();
         		GUI.main(args);
         		
@@ -265,7 +235,6 @@ public class GUI
                 if(i >= 0){
                     // remove a row from jtable
                     model.removeRow(i);
-                    Node.Nodes.remove(i);
                 }
                 else{
                     System.out.println("Delete Error");
