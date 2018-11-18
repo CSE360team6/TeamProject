@@ -46,7 +46,7 @@ public class About extends JFrame {
 		contentPane.add(lblHelp);
 		
 		JTextArea txtAbout = new JTextArea();
-		txtAbout.setText("This is a program with a gui interface that was created to path a network. It's creators are Cason Mandigo, Andrew Meshay, Kai Yin, and Justin Lynch. This project was coded using Java with "
+		txtAbout.setText("This is a program with a gui interface that was created to path a network, with added functions to display critical paths, and write to a textfile if a parameter is checked. It's creators are Cason Mandigo, Andrew Meshay, Kai Yin, and Justin Lynch. This project was coded using Java with "
 				+ "Eclipse as the IDE, and gitHub was used as the version control.");
 		txtAbout.setBounds(10, 11, 464, 439);
 		txtAbout.setLineWrap(true);

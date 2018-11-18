@@ -191,6 +191,15 @@ public class GUI
         btnRestart.setBounds(365, 0, 89, 23);
         frmNetworkPathwayFinder.getContentPane().add(btnRestart);
         
+        JButton btnExit = new JButton("Exit");
+        btnExit.addActionListener(new ActionListener() {
+        	public void actionPerformed(ActionEvent arg0) {
+        		frmNetworkPathwayFinder.dispose();
+        	}
+        });
+        btnExit.setBounds(777, 13, 97, 25);
+        frmNetworkPathwayFinder.getContentPane().add(btnExit);
+        
 
         // create an array of objects to set the row data
         Object[] row = new Object[3];
